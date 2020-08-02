@@ -32,6 +32,7 @@ type HTMLResponse struct {
 	Template      string
 	Title         string
 	CanonicalLink string
+	Breadcrumb    []Breadcrumb
 	Content       interface{}
 	SkipLayout    bool
 
@@ -134,4 +135,11 @@ func csrfField(r *http.Request) template.HTML {
 		token = services.CSRFToken(r)
 	}
 	return template.HTML(`<input type="hidden" name="csrf_token" value="` + html.EscapeString(token) + `">`)
+}
+
+// Breadcrumb shows where the user is currently.
+type Breadcrumb struct {
+	Text   string
+	Link   string
+	Active bool
 }

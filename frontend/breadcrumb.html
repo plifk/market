@@ -1,0 +1,11 @@
+{{define "breadcrumb"}}
+{{with .}}
+<nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+<ul>
+{{range .}}
+<li {{if .Active}}class="is-active is-sr-only"{{end}}><a href="{{.Link}}"{{if .Active}} aria-current="page"{{end}}>{{.Text}}</a></li>
+{{end}}
+</ul>
+</nav>
+{{end}}
+{{end}}
