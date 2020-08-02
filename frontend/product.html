@@ -1,0 +1,50 @@
+{{define "product"}}
+<div class="columns">
+        <div class="column is-half">
+                {{template "product-images"}}
+        </div>
+        <div class="column is-half">
+                {{template "product-short-desc"}}
+                {{template "product-buy-buttons"}}
+        </div>
+</div>
+<div class="columns">
+        <div class="column content is-small">
+                <p class="is-small">
+                        Not compatible with older Mac not capable of handling 4K video output. If your Mac is
+                        new, <a href="https://support.apple.com/kb/HT201541">upgrade to a later version of
+                                macOS</a> if you have any
+                        problems.
+                </p>
+        </div>
+</div>
+<div class="columns">
+        <div class="column">
+                <h2 class="subtitle is-3">Reviews</h2>
+                4.5/5
+                <span class="material-icons">
+                        star
+                </span>
+                <span class="material-icons">
+                        star
+                </span>
+                <span class="material-icons">
+                        star
+                </span>
+                <span class="material-icons">
+                        star
+                </span>
+                <span class="material-icons">
+                        star_half
+                </span>
+        </div>
+        <div class="column">
+                {{template "product-long-desc"}}
+        </div>
+</div>
+<div class="columns">
+        <div class="column">
+                {{template "browsing-history"}}
+        </div>
+</div>
+{{end}}

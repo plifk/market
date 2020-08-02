@@ -1,0 +1,36 @@
+{{define "product-buy-buttons"}}
+<p>Color: <strong>Black</strong></p>
+<div class="buttons">
+        <a class="button is-outlined">White</a>
+        <a class="button is-info is-outlined">Black</a>
+        <a class="button is-outlined">Dark grey</a>
+        <a class="button is-outlined" disabled>Orange</a>
+</div>
+<p>Power cord: <strong>US</strong></p>
+<div class="buttons">
+        <a class="button is-info is-outlined">US</a>
+        <a class="button is-outlined">UK</a>
+        <a class="button is-outlined">Europlug</a>
+</div>
+<form action="" method="post">
+        <p>
+                <a class="button is-link is-large">
+                        Add to my shopping cart
+                        &nbsp;
+                        <span class="material-icons">
+                                add_shopping_cart
+                        </span>
+                </a>
+        </p>
+        <small><label for="product-quantity">Quantity:</label></small>
+        <p class="control">
+                <span class="select is-small">
+                        <select id="product-quantity">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                        </select>
+                </span>
+        </p>
+</form>
+{{end}}
