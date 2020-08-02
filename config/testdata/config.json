@@ -1,0 +1,10 @@
+{
+        "HTTPAddress": "localhost:8080",
+        "HTTPCertFile": "cert.pem",
+        "HTTPKeyFile": "cert.key",
+        "SQLDataSourceName": "market",
+        "FileStorageHost": "localhost:9000",
+        "FileStorageAPIKey": "key",
+        "FileStorageSecret": "secret",
+        "HTTPInspectionAddress": "localhost:7000"
+}
