@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/plifk/market/config"
 	"github.com/plifk/market/internal/services"
 	"github.com/plifk/market/internal/validator"
 )
@@ -57,6 +58,7 @@ func (f *Frontend) prepareTemplates(dir string) (*template.Template, error) {
 
 // HTMLResponseParams injected into the template object.
 type HTMLResponseParams struct {
+	Settings  *config.Settings
 	CSRFField template.HTML
 	Request   *http.Request
 	User      *services.User
@@ -77,6 +79,7 @@ func (f *Frontend) Respond(w http.ResponseWriter, r *http.Request, resp *HTMLRes
 	}
 
 	resp.Params = &HTMLResponseParams{
+		Settings:  &f.Modules.Settings,
 		CSRFField: csrfField(r),
 		Request:   r,
 		User:      f.Modules.Accounts.FromRequest(r),
