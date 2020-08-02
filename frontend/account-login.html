@@ -1,0 +1,68 @@
+{{define "account-login"}}
+<section class="section">
+        <div class="container">
+                <div class="columns">
+                        <div class="column is-half is-offset-one-quarter">
+                                <h1 class="title">Login</h1>
+                                {{template "account-login-form" .}}
+                        </div>
+                </div>
+                <div class="columns">
+                        <div class="column is-half is-offset-one-quarter">
+                                <p class="subtitle">If you are not yet registered, you can create an account.</p>
+                                <a href="/signup" class="button">Create my account</a>
+                        </div>
+                </div>
+        </div>
+</section>
+{{end}}
+{{define "account-login-form"}}
+<form action="/login" method="POST">
+        {{with .Content.Error}}
+        {{template "account-login-error" .}}
+        {{end}}
+        <div class="field">
+                <div class="control has-icons-left">
+                        <input class="input is-large" name="email" type="email" placeholder="Email" value="{{.Content.Email}}" required>
+                        <span class="icon is-large is-left">
+                                <span class="material-icons">
+                                        face
+                                </span>
+                        </span>
+                </div>
+        </div>
+        <div class="field">
+                <div class="control has-icons-left">
+                        <input class="input is-large" name="password" type="password" placeholder="Password" required>
+                        <span class="icon is-large is-left">
+                                <span class="material-icons">
+                                        lock
+                                </span>
+                        </span>
+                </div>
+        </div>
+        <div class="field">
+                <div class="level">
+                        <div class="level-left">
+                                <label class="checkbox">
+                                        <input name="remember_me" type="checkbox"{{if .Content.RememberMe}} checked{{end}}>
+                                        Remember me (keep me signed in)
+                                </label>
+                        </div>
+                        <div class="level-right">
+                                <a href="/recover">Forgot your password?</a>
+                        </div>
+                </div>
+        </div>
+        {{.Params.CSRFField}}
+        <button type="submit" class="button is-large is-primary">Continue</button>
+</form>
+{{end}}
+{{define "account-login-error"}}
+<div class="notification is-danger">
+        <p>Login failed.</p>
+        {{range $err := . }}
+        <li>{{$err}}</li>
+        {{end}}
+</div>
+{{end}}
