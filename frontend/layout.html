@@ -1,0 +1,13 @@
+{{define "layout"}}<!DOCTYPE html>
+<html>
+<head>
+	{{template "head" }}
+</head>
+<body>
+	{{template "navigation-bar"}}
+	{{template "categories-menu"}}
+	{{ .Body }}
+	<script async="" src="lib/main.js" crossorigin></script>
+</body>
+</html>
+{{end}}

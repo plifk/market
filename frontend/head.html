@@ -1,0 +1,15 @@
+{{define "head"}}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{template "head-stylesheet.html"}}
+<link rel="profile" href="http://microformats.org/profile/hcard">
+<title>{{.Title}}</title>
+{{if .CanonicalLink}}<link rel="canonical" href="{{.CanonicalLink}}">{{end}}
+<link rel="dns-prefetch" href="{{.Settings.ThumbnailServiceHost}}" crossorigin>
+<link rel="preconnect" href="{{.Settings.ThumbnailServiceHost}}" crossorigin>
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180px.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/apple-touch-icon-32px.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/apple-touch-icon-16px.png">
+{{end}}
