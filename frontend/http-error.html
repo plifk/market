@@ -1,0 +1,27 @@
+{{define "http-error"}}
+<section class="section">
+        <div class="container">
+                <div class="columns">
+                        <div class="column is-half is-offset-one-quarter">
+                                {{if eq .Content.StatusCode 404}}
+                                <h1 class="title">Page not found</h1>
+                                <p>This is not what you are looking for.</p>
+                                {{else}}
+                                <h1 class="title">{{ .StatusText }}</h1>
+                                <p>Oops, something went wrong.</p>
+                                {{end}}
+                                {{with .Content.Errors}}{{template "http-error-list" .}}{{end}}
+                        </div>
+                </div>
+        </div>
+</section>
+{{end}}
+{{define "http-error-list"}}
+<div class="notification is-info">
+        <ul>
+                {{range $err := . }}
+                <li>{{$err}}</li>
+                {{end}}
+        </ul>
+</div>
+{{end}}
