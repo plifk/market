@@ -1,0 +1,22 @@
+{
+        "HTTPAddress": "localhost",
+        "HTTPCertFile": "cert.pem",
+        "HTTPKeyFile": "cert.key",
+        "SQLDataSourceName": "postgres://market:@localhost/market",
+        "RedisAddress": "localhost:6379",
+        "RedisUsername": "",
+        "RedisPassword": "",
+        "ElasticsearchHost": "http://localhost:9000/",
+        "ElasticsearchAPIKey": "",
+        "ElasticsearchUsername": "",
+        "ElasticsearchPassword": "",
+        "FileStorageHost": "https://storage.market.localhost/",
+        "FileStorageAPIKey": "storage-api-key",
+        "FileStorageSecret": "secret",
+        "HTTPInspectionAddress": "localhost:6060",
+        "ThumbnailServiceHost": "https://images.market.localhost/",
+        "ThumbnailServiceHMCA": "secret",
+        "StaticDirectory": "/path/to/market/static",
+        "FrontendDirectory": "/path/to/market/frontend",
+        "Debug": true
+}
