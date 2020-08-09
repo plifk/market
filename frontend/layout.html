@@ -4,7 +4,7 @@
 	{{template "head" .}}
 </head>
 <body>
-	{{template "navigation-bar"}}
+	{{template "navigation-bar" .Params}}
 	{{template "categories-menu"}}
 	{{ .Body }}
 	<script async="" src="lib/main.js" crossorigin></script>
