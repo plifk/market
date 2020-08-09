@@ -1,0 +1,70 @@
+# For more advanced usage you may want to use the native Caddy v2 JSON config.
+# You can use
+# $ caddy adapt --config Caddyfile --pretty
+# to transform this Caddyfile into a native Caddy v2 JSON config.
+
+# For production purposes, you may use a similar configuration file but with tls internal
+# to use ACME for HTTPS (by default, Let's Encrypt is the issuer).
+
+# For development, you can use mkcert to generate temporary certificates.
+# https://mkcert.dev/
+#
+# First, install a local root CA (Certificate Authority):
+# $ mkcert -install
+# Second, create certificates to use with market:
+# $ mkcert -cert-file certs/www.pem -key-file certs/www-key.pem "market.localhost" "*.market.localhost"
+
+market.localhost {
+	redir https://www.market.localhost{uri}
+	tls certs/www.pem certs/www-key.pem # use a self-signed certificate you can generate with mkcert.
+}
+
+www.market.localhost {
+	encode zstd gzip
+	root * static
+	file_server
+	route /* {
+		reverse_proxy /* 127.0.0.1:8080
+	}
+	tls certs/www.pem certs/www-key.pem
+	handle_errors {
+		respond "HTTP status code {http.error.status_code}
+"
+	}
+}
+
+api.market.localhost {
+	encode zstd gzip
+	route /* {
+		reverse_proxy /* 127.0.0.1:8080
+	}
+	tls certs/www.pem certs/www-key.pem
+	handle_errors {
+		respond "HTTP status code {http.error.status_code}
+"
+	}
+}
+
+storage.market.localhost {
+	encode zstd gzip
+	route /* {
+		reverse_proxy /* 127.0.0.1:9000
+	}
+	tls certs/www.pem certs/www-key.pem
+	handle_errors {
+		respond "HTTP status code {http.error.status_code}
+"
+	}
+}
+
+images.market.localhost {
+	encode zstd gzip
+	route /* {
+		reverse_proxy /* 127.0.0.1:8088
+	}
+	tls certs/www.pem certs/www-key.pem
+	handle_errors {
+		respond "HTTP status code {http.error.status_code}
+"
+	}
+}
