@@ -36,7 +36,7 @@ func (s *System) httpHandlers() {
 		Handler: s.core.CSRFProtection, // This CSRF middleware injects the HTTP entrypoint.
 	}
 	if settings.Debug {
-		s.httpServer.Handler = httpLogger().Middleware(s)
+		s.httpServer.Handler = httpLogger().Middleware(s.httpServer.Handler)
 	}
 
 	s.api = &api.Router{}
