@@ -1,0 +1,63 @@
+{{define "account"}}
+<div class="container">
+        <div class="columns">
+                <div class="column">
+                        <nav class="level">
+                                <div class="level-left">
+                                        {{template "breadcrumb" .Breadcrumb}}
+                                </div>
+                                <div class="level-right">
+                                </div>
+                        </nav>
+                </div>
+        </div>
+        <div class="columns">
+                <div class="column is-one-quarter">
+                        <aside class="menu">
+                                <p class="menu-label">
+                                        General
+                                </p>
+                                <ul class="menu-list">
+                                        <li><a href="/account"{{if eq .Params.Request.URL.Path "/account"}} class="is-active"{{end}}>Overview</a></li>
+                                        <li><a href="/account/mfa"{{if eq .Params.Request.URL.Path "/account/mfa"}} class="is-active"{{end}}>2-Step Verification<br />Multi-factor authentication</a></li>
+                                        <li><a href="/account/password"{{if eq .Params.Request.URL.Path "/account/password"}} class="is-active"{{end}}>Change your password</a></li>
+                                        <li><a href="/account/recent"{{if eq .Params.Request.URL.Path "/account/recent"}} class="is-active"{{end}}>Login & Access history</a></li>
+                                </ul>
+                                <p class="menu-label">
+                                        Shopping
+                                </p>
+                                <ul class="menu-list">
+                                        <li><a>Your orders</a></li>
+                                        <li><a>Your addresses</a></li>
+                                        <li><a>Wallet</a></li>
+                                </ul>
+                        </aside>
+                </div>
+                <div class="column is-one-third">
+                        <h1 class="title">Your Account</h1>
+                        <table class="table is-striped">
+                                <tr>
+                                        <th>Name</th>
+                                        <td>{{.Params.User.Name}}</td>
+                                </tr>
+                                <tr>
+                                        <th>Email</th>
+                                        <td>
+                                                {{.Params.User.Email}}
+                                        </td>
+                                </tr>
+                                <tr>
+                                        <th>Phone</th>
+                                        <td>{{.Params.User.Phone}}</td>
+                                </tr>
+                                <tr>
+                                        <th>Password</th>
+                                        <td>Change your password</td>
+                                </tr>
+                        </table>
+                        <h2 class="title">Access level</h2>
+                        <p>You've admin rights.</p>
+                </div>
+        </div>
+</div>
+{{end}}

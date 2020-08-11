@@ -1,0 +1,17 @@
+{{define "search"}}
+<div class="container">
+        <div class="columns">
+                <div class="column">
+                        {{template "search-navigation-bar"}}
+                </div>
+        </div>
+        <div class="columns">
+                <div class="column is-one-quarter">
+                        {{template "search-filter"}}
+                </div>
+                <div class="column">
+                        {{template "search-results"}}
+                </div>
+        </div>
+</div>
+{{end}}

@@ -7,7 +7,7 @@
                                 <h1 class="title">Page not found</h1>
                                 <p>This is not what you are looking for.</p>
                                 {{else}}
-                                <h1 class="title">{{ .StatusText }}</h1>
+                                <h1 class="title">{{ .Content.StatusText }}</h1>
                                 <p>Oops, something went wrong.</p>
                                 {{end}}
                                 {{with .Content.Errors}}{{template "http-error-list" .}}{{end}}

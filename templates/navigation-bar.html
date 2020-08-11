@@ -1,0 +1,40 @@
+{{define "navigation-bar"}}<nav class="level">
+        <p class="level-item">
+                <a href="/" class="link is-info">
+                        <img src="/images/mercadoexpress.png" width="200">
+                </a>
+        </p>
+        <p class="level-item">
+                View all categories
+        </p>
+        <div class="level-item control has-icons-right">
+                <input class="input" type="search" placeholder="Search mercadoexpress.com">
+                <span class="icon is-small is-right">
+                        <span class="material-icons" style="color:navy;">
+                                search
+                        </span>
+                </span>
+        </div>
+        <p class="level-item">
+                {{with .User}}
+                <span class="icon is-small is-right">
+                        <span class="material-icons">
+                                account_box
+                        </span>
+                </span>
+                &nbsp;
+                <a href="/account">{{.Name}}</a>
+                {{else}}
+                <a href="/login" class="button is-primary">Sign in</a>
+                {{end}}
+        </p>
+        <p class="level-item">
+                <span class="icon is-small is-right">
+                        <span class="material-icons">
+                                shopping_cart
+                        </span>
+                </span>
+                &nbsp;
+        </p>
+</nav>
+{{end}}

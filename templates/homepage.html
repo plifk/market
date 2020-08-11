@@ -1,0 +1,16 @@
+{{define "homepage"}}
+<div class="container">
+        <div class="columns">
+                <div class="column">
+                        <nav class="level">
+                                <div class="level-left">
+                                        {{template "breadcrumb" .Breadcrumb}}
+                                </div>
+                                <div class="level-right">
+                                </div>
+                        </nav>
+                </div>
+        </div>
+        {{template "search"}}
+</div>
+{{end}}

@@ -1,0 +1,50 @@
+{{define "search-results"}}
+<div class="level">
+        <div class="level-item level-left">
+                <p class="subtitle is-5">
+                        1-16 of over <strong>123</strong> results for "lg 4k"
+                </p>
+        </div>
+        <div class="level-item level-right">
+                <p class="level-item"><strong>All</strong></p>
+                <p class="level-item"><a class="button is-success">New</a></p>
+                <p class="level-item"><a class="button">Archive</a></p>
+        </div>
+
+</div>
+<ul>
+        <li>
+                <div class="">
+                        <div class="level-item level-left">
+                                {{ img "/products/images/2.jpg" 140 "side image" }}
+                                <h1 class="subtitle">LG Ultrafine 4K compatible with macOS</h1>
+                                <p class="tag is-danger is-light is-large">€999,00</p>
+                        </div>
+                        <div class="level-item level-right">
+                        </div>
+                </div>
+        </li>
+</ul>
+<div class="tile is-ancestor">
+        <div class="tile is-4 is-vertical is-parent">
+                <article class="tile is-child notification is-danger">
+                        <p class="title">LG Ultrafine 4K</p>
+                        <p class="subtitle">€699 today</p>
+                </article>
+                <article class="tile is-child notification is-info">
+                        <p class="title">LG Ultrafine 4K</p>
+                        <p class="subtitle">€699 today</p>
+                        <figure class="image">
+                                {{ img "/products/images/front.jpg" 400 "front-view" }}
+                        </figure>
+                </article>
+        </div>
+        <div class="tile is-parent">
+                <article class="tile is-child notification is-warning">
+                        <p class="title">LG Ultrafine 4K</p>
+                        <p class="subtitle">€699 today</p>
+                </article>
+        </div>
+</div>
+{{template "pagination"}}
+{{end}}
