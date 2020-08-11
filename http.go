@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/henvic/httpretty"
 	"github.com/plifk/market/internal/api"
-	"github.com/plifk/market/internal/webpages"
+	"github.com/plifk/market/internal/frontend"
 )
 
 // ServerHTTP handles HTTP requests to the market system.
@@ -22,7 +22,7 @@ func (s *System) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case strings.HasPrefix(r.Host, "api."):
 		h = s.api
 	case strings.HasPrefix(r.Host, "www."):
-		h = s.webpages
+		h = s.frontend
 	default:
 		h = s.notFound
 	}
@@ -42,8 +42,8 @@ func (s *System) httpHandlers() {
 	s.api = &api.Router{}
 	s.api.Load(s.Modules)
 
-	s.webpages = &webpages.Router{}
-	s.webpages.Load(s.Modules)
+	s.frontend = &frontend.Router{}
+	s.frontend.Load(s.Modules)
 }
 
 func httpLogger() *httpretty.Logger {

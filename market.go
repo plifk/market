@@ -12,8 +12,8 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/plifk/market/config"
 	"github.com/plifk/market/internal/api"
+	"github.com/plifk/market/internal/frontend"
 	"github.com/plifk/market/internal/services"
-	"github.com/plifk/market/internal/webpages"
 )
 
 // System of the market.
@@ -24,7 +24,7 @@ type System struct {
 
 	httpServer *http.Server
 	api        *api.Router
-	webpages   *webpages.Router
+	frontend   *frontend.Router
 	notFound   notFoundHandler
 }
 

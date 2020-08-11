@@ -60,8 +60,8 @@ type Settings struct {
 	// TODO(henvic): Embed files in the binary (see https://github.com/golang/go/issues/35950).
 	StaticDirectory string
 
-	// FrontendDirectory where HTML templates are stored.
-	FrontendDirectory string
+	// TemplatesDirectory where HTML templates are stored.
+	TemplatesDirectory string
 
 	// ThumbnailServiceHost for the imaginary microservice.
 	ThumbnailServiceHost string

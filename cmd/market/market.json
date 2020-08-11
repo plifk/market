@@ -17,6 +17,6 @@
         "ThumbnailServiceHost": "https://images.market.localhost/",
         "ThumbnailServiceHMCA": "secret",
         "StaticDirectory": "/path/to/market/static",
-        "FrontendDirectory": "/path/to/market/frontend",
+        "TemplatesDirectory": "/path/to/market/templates",
         "Debug": true
 }
