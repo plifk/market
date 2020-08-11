@@ -35,7 +35,7 @@ func (s *System) Load(filename string) (err error) {
 	if err != nil {
 		return err
 	}
-	postgres, err := pgxpool.Connect(context.Background(), settings.SQLDataSourceName)
+	postgres, err := connectPostgres(context.Background(), settings.SQLDataSourceName)
 	if err != nil {
 		return fmt.Errorf("cannot establish a connection with a PostgreSQL server: %w", err)
 	}
@@ -57,6 +57,17 @@ func (s *System) Load(filename string) (err error) {
 	}
 	s.Modules, err = services.NewModules(s.core)
 	return err
+}
+
+func connectPostgres(ctx context.Context, connString string) (*pgxpool.Pool, error) {
+	config, err := pgxpool.ParseConfig(connString)
+	if err != nil {
+		return nil, err
+	}
+	// Do not try to connect to database during initialization.
+	// Otherwise, a failure will mean the market server won't go online before the database.
+	config.LazyConnect = true
+	return pgxpool.ConnectConfig(ctx, config)
 }
 
 // ListenAndServe listens on the TCP network address srv.Addr and then
@@ -98,6 +109,10 @@ func (s *System) handleShutdown(ctx context.Context) {
 
 func (s *System) checkSQL(ctx context.Context) {
 	pg := s.core.Postgres
+	if _, err := pg.Exec(ctx, "SELECT 1"); err != nil {
+		log.Printf("not connected to PostgreSQL yet: %v\n", err)
+		return
+	}
 	stat := pg.Stat()
 	log.Printf("total of PostgreSQL connections: %v\n", stat.TotalConns())
 }
