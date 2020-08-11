@@ -1,6 +1,9 @@
 # Certificates
 certs/
 
+# Binary files
+cmd/market/market
+
 # Config
 cmd/market/local.json
 
