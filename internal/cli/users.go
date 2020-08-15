@@ -70,6 +70,10 @@ func (c *setPasswordCommand) Run(ctx context.Context, args ...string) (err error
 		u, err = accounts.GetUserByID(ctx, find)
 	}
 
+	if err != nil {
+		return err
+	}
+
 	fmt.Printf(`Name: %v
 User ID: %v
 Email: %v
