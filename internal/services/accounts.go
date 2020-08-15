@@ -72,16 +72,21 @@ type Accounts struct {
 	core *Core
 }
 
-// FromRequest gets an user account from a given request.
-func (a *Accounts) FromRequest(r *http.Request) *User {
-	session := GetSession(r)
-	if session == nil && session.UserID != "" {
-		return nil
+// UserFromRequest extracts the session data from a request.
+func UserFromRequest(r *http.Request) *User {
+	ctx := r.Context()
+	if u, ok := ctx.Value(userCtxKey{}).(*User); ok {
+		return u
 	}
-	// TODO(henvic): Add caching layer.
-	u, _ := a.GetUserByID(r.Context(), session.UserID)
-	return u
+	return nil
 }
+
+// UserContext adds an user object to a given context.
+func UserContext(ctx context.Context, u *User) context.Context {
+	return context.WithValue(ctx, userCtxKey{}, u)
+}
+
+type userCtxKey struct{}
 
 // NewUser creates a new user.
 func (a *Accounts) NewUser(ctx context.Context, p NewUserParams) (id string, err error) {

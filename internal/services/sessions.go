@@ -35,8 +35,8 @@ type Session struct {
 	RememberMe bool
 }
 
-// GetSession extracts the session data from a request.
-func GetSession(r *http.Request) *Session {
+// SessionFromRequest extracts the session data from a request.
+func SessionFromRequest(r *http.Request) *Session {
 	ctx := r.Context()
 	if session, ok := ctx.Value(sessionKey{}).(*Session); ok {
 		return session
@@ -113,7 +113,7 @@ type LoginParams struct {
 
 // Login logs out of any existing session and logs in again.
 func (s *Sessions) Login(w http.ResponseWriter, r *http.Request, userID string, p LoginParams) (*Session, error) {
-	oldSession := GetSession(r)
+	oldSession := SessionFromRequest(r)
 	sessionID, stickyID := newSessionID()
 	session := makeSession(&sessionParams{
 		ID:         sessionID,

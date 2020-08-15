@@ -1,4 +1,4 @@
-package webpages
+package frontend
 
 import (
 	"log"
@@ -13,16 +13,19 @@ import (
 // StaticHandler checks permission to see if the user is able to access static content, and serve them.
 // This is useful to provide files such as favicon.ico, or other stuff that aren't supposed to be stored in the CDN.
 type StaticHandler struct {
-	Modules  *services.Modules
 	Frontend *Frontend
 }
 
 func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if strings.HasPrefix(r.URL.Path, "/admin/") { // TODO(henvic): Verify if user has access.
-		h.Frontend.HTTPError(w, r, http.StatusNotFound)
-		return
+	if strings.HasPrefix(r.URL.Path, "/admin/") {
+		u := services.UserFromRequest(r)
+		if u.Access != services.AdminAuthorization {
+			h.Frontend.HTTPError(w, r, http.StatusNotFound)
+			return
+		}
 	}
-	path := filepath.Join(h.Modules.Settings.StaticDirectory, r.URL.Path)
+	modules := h.Frontend.Modules
+	path := filepath.Join(modules.Settings.StaticDirectory, r.URL.Path)
 	switch _, err := os.Stat(path); {
 	case os.IsNotExist(err):
 		h.Frontend.HTTPError(w, r, http.StatusNotFound)
@@ -38,11 +41,4 @@ func (h *StaticHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.ServeFile(w, r, path)
-}
-
-// dirRouter makes it less repetitive to use a directory-style routing style.
-type dirRouter string
-
-func (p dirRouter) is(route string) bool {
-	return route == string(p) || strings.HasPrefix(string(p), string(route)+"/")
 }

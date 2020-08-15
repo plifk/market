@@ -1,4 +1,4 @@
-package webpages
+package frontend
 
 import (
 	"path"

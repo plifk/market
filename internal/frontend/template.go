@@ -1,4 +1,4 @@
-package webpages
+package frontend
 
 import (
 	"bytes"
@@ -15,18 +15,6 @@ import (
 	"github.com/plifk/market/internal/services"
 	"github.com/plifk/market/internal/validator"
 )
-
-// templateFiles contains a list of files to be parsed by html/template.
-// template.ParseFiles discarding files with duplicated names in different directories,
-// therefore, files on inner directories should contain unique names.
-// As a convention, we can just duplicate the directory name as a prefix.
-// e.g., admin/admin-menu.html instead of admin/menu.html
-var templateFiles = []string{
-	"layout.html",
-	"navigation-bar.html",
-	"categories-menu.html",
-	"homepage.html",
-}
 
 // HTMLResponse to send to the client.
 type HTMLResponse struct {
@@ -71,7 +59,7 @@ type HTMLResponseParams struct {
 // https://stackoverflow.com/questions/28830543/how-to-use-a-field-of-struct-or-variable-value-as-template-name/28831138#28831138
 func (f *Frontend) Respond(w http.ResponseWriter, r *http.Request, resp *HTMLResponse) {
 	settings := f.Modules.Settings
-	t, err := f.prepareTemplates(settings.FrontendDirectory) // TODO(henvic): cache in production.
+	t, err := f.prepareTemplates(settings.TemplatesDirectory) // TODO(henvic): cache in production.
 	if err != nil {
 		log.Printf("cannot parse template files: %v\n", err)
 		http.Error(w, fmt.Sprintf("%v: template error", http.StatusText(http.StatusInternalServerError)), http.StatusInternalServerError)
@@ -82,7 +70,7 @@ func (f *Frontend) Respond(w http.ResponseWriter, r *http.Request, resp *HTMLRes
 		Settings:  &f.Modules.Settings,
 		CSRFField: csrfField(r),
 		Request:   r,
-		User:      f.Modules.Accounts.FromRequest(r),
+		User:      services.UserFromRequest(r),
 	}
 
 	var writer io.Writer = w // If response doesn't use layout, do not buffer.

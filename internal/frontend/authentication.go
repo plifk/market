@@ -1,4 +1,4 @@
-package webpages
+package frontend
 
 import (
 	"errors"
@@ -12,7 +12,6 @@ import (
 
 // LoginHandler handles the user authentication.
 type LoginHandler struct {
-	Modules  *services.Modules
 	Frontend *Frontend
 }
 
@@ -30,7 +29,7 @@ func redirectAfterLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	session := services.GetSession(r)
+	session := services.SessionFromRequest(r)
 	if session != nil && session.UserID != "" {
 		switch r.Method {
 		// Post is accepted because if the user opens up several login windows,
@@ -87,7 +86,8 @@ func (h *LoginHandler) loginPostHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	accounts := h.Modules.Accounts
+	modules := h.Frontend.Modules
+	accounts := modules.Accounts
 	u, err := accounts.GetUserByEmail(r.Context(), email)
 	switch {
 	case err == services.ErrUserNotFound:
@@ -109,8 +109,8 @@ func (h *LoginHandler) loginPostHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	if session := services.GetSession(r); session != nil {
-		if err := h.Modules.Sessions.Close(r.Context(), session.StickyID); err != nil {
+	if session := services.SessionFromRequest(r); session != nil {
+		if err := modules.Sessions.Close(r.Context(), session.StickyID); err != nil {
 			log.Printf("cannot close session with sticky id %q: %v", session.StickyID, err)
 			h.Frontend.HTTPError(w, r, http.StatusInternalServerError)
 			return
@@ -120,8 +120,8 @@ func (h *LoginHandler) loginPostHandler(w http.ResponseWriter, r *http.Request) 
 	params := services.LoginParams{
 		RememberMe: rememberMe,
 	}
-	h.Modules.Security.RegenerateCSRFToken(w, r) // Create new CSRF token.
-	if session, err := h.Modules.Sessions.Login(w, r, u.UserID, params); err != nil {
+	modules.Security.RegenerateCSRFToken(w, r) // Create new CSRF token.
+	if session, err := modules.Sessions.Login(w, r, u.UserID, params); err != nil {
 		log.Printf("cannot login user %q (with sticky id %q): %v", u.UserID, session.StickyID, err)
 		h.Frontend.HTTPError(w, r, http.StatusInternalServerError)
 		return
@@ -131,11 +131,15 @@ func (h *LoginHandler) loginPostHandler(w http.ResponseWriter, r *http.Request) 
 
 // LogoutHandler manages the logout endpoint.
 type LogoutHandler struct {
-	Modules  *services.Modules
 	Frontend *Frontend
 }
 
 func (h *LogoutHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	session := services.SessionFromRequest(r)
+	if session == nil || session.UserID == "" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 	if r.Method != http.MethodPost {
 		resp := &HTMLResponse{
 			Template: "account-logout",
@@ -145,9 +149,10 @@ func (h *LogoutHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.Modules.Security.RegenerateCSRFToken(w, r) // We want to make sure we invalidate CSRF tokens immediately.
-	if session := services.GetSession(r); session != nil {
-		if err := h.Modules.Sessions.Close(r.Context(), session.StickyID); err != nil {
+	modules := h.Frontend.Modules
+	modules.Security.RegenerateCSRFToken(w, r) // We want to make sure we invalidate CSRF tokens immediately.
+	if session := services.SessionFromRequest(r); session != nil {
+		if err := modules.Sessions.Close(r.Context(), session.StickyID); err != nil {
 			log.Printf("cannot close session with sticky id %q: %v", session.StickyID, err)
 			h.Frontend.HTTPError(w, r, http.StatusInternalServerError)
 			return

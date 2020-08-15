@@ -1,14 +1,11 @@
-package webpages
+package frontend
 
 import (
 	"net/http"
-
-	"github.com/plifk/market/internal/services"
 )
 
 // HomepageHandler handles the / page.
 type HomepageHandler struct {
-	Modules  *services.Modules
 	Frontend *Frontend
 }
 

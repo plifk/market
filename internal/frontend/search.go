@@ -1,14 +1,11 @@
-package webpages
+package frontend
 
 import (
 	"net/http"
-
-	"github.com/plifk/market/internal/services"
 )
 
 // SearchHandler for the application.
 type SearchHandler struct {
-	Modules  *services.Modules
 	Frontend *Frontend
 }
 
