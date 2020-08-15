@@ -28,7 +28,7 @@ func (c *serveCommand) Short() string {
 }
 
 func (c *serveCommand) Run(ctx context.Context, args ...string) (err error) {
-	ctx, cancel := ctxsignal.WithTermination(context.Background())
+	ctx, cancel := ctxsignal.WithTermination(ctx)
 	defer cancel()
 	var system market.System
 	if err := system.Load(c.s.ConfigPath); err != nil {
