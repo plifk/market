@@ -123,10 +123,12 @@ func (rh *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // dirRouter makes it less repetitive to use a directory-style routing style.
 type dirRouter string
 
+// is checks if the path is the exact route with an optional /.
 func (p dirRouter) is(route string) bool {
 	return route == string(p) || route == string(p+"/")
 }
 
+// within checks if the path is within a route with an optional /.
 func (p dirRouter) within(route string) bool {
-	return route == string(p) || strings.HasPrefix(string(p), string(route)+"/")
+	return route == string(p) || strings.HasPrefix(string(p)+"/", string(route))
 }
