@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/plifk/market/config"
+	"github.com/plifk/market/internal/config"
 	"github.com/plifk/market/internal/services"
 	"github.com/plifk/market/internal/validator"
 )

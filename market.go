@@ -10,8 +10,8 @@ import (
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/plifk/market/config"
 	"github.com/plifk/market/internal/api"
+	"github.com/plifk/market/internal/config"
 	"github.com/plifk/market/internal/frontend"
 	"github.com/plifk/market/internal/services"
 )

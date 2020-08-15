@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/henvic/clino"
-	"github.com/plifk/market/config"
+	"github.com/plifk/market/internal/config"
 )
 
 // State of the application holds flags that persists between the
