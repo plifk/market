@@ -21,7 +21,7 @@ const MaxPasswordLength = 128
 // zxcvbn: Low-Budget Password Strength Estimation
 // https://github.com/nbutton23/zxcvbn-go
 // Talk: https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/wheeler
-func Validate(password string, unsafe ...string) error {
+func Validate(password string, blocked ...string) error {
 	const minPasswordLength = 10
 
 	// The longer the password, the harder it is for a hashing algorithm to process it. Therefore, we want to limit it too.
@@ -114,17 +114,20 @@ func Validate(password string, unsafe ...string) error {
 			return errLowEntropy
 		}
 	}
-	unsafe = append(unsafe, defaultUnsafe...)
-	for _, badword := range unsafe {
+	blocked = append(blocked, defaultBlocked...)
+	for _, badword := range blocked {
 		badword = strings.ToLower(badword)
-		if lp == badword || (len(badword) >= 4 && len(lp)-letters < 3 && strings.Contains(lp, badword)) {
+		if lp == badword || len(lp) <= len(badword)+5 && strings.Contains(lp, badword) {
 			return errLowEntropy
 		}
 	}
 	return nil
 }
 
-var defaultUnsafe = []string{"pass", "password", "p4ss", "p4ssw0rd", "secret", "senha", "love", "iloveyou", "ronaldo", "computer", "money", "12345", "54321"}
+var defaultBlocked = []string{
+	"pass", "password", "p4ss", "p4ssw0rd", "secret", "senha",
+	"root", "admin", "computer", "money", "12345", "54321",
+}
 
 var errLowEntropy = errors.New("password has low entropy")
 
