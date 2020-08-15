@@ -4,6 +4,9 @@ certs/
 # Binary files
 cmd/market/market
 
+# Frontend assets
+static/webicons
+
 # Config
 cmd/market/local.json
 
