@@ -35,4 +35,4 @@ jobs:
         go mod download
 
     - name: Run checks
-      run: ./ci-lint.sh
+      run: ./scripts/ci-lint.sh
