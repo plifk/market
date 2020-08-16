@@ -33,7 +33,12 @@ jobs:
       run: go mod download
 
     - name: Test
-      run: go test -race ./...
+      run: go test -race -covermode atomic -coverprofile=profile.cov ./...
 
     - name: Build
       run: go build -v ./cmd/market
+
+    - name: Code coverage
+      uses: shogo82148/actions-goveralls@v1
+      with:
+        path-to-profile: profile.cov
