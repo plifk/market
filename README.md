@@ -1,4 +1,6 @@
 # Market
+[![PkgGoDev](https://pkg.go.dev/badge/https://github.com/plifk/market)](https://pkg.go.dev/https://github.com/plifk/market) [![Build Status](https://github.com/plifk/market/workflows/Tests/badge.svg)](https://github.com/plifk/market/actions?query=workflow%3ATests) [![Coverage Status](https://coveralls.io/repos/plifk/market/badge.svg)](https://coveralls.io/r/plifk/market) [![Go Report Card](https://goreportcard.com/badge/github.com/plifk/market)](https://goreportcard.com/report/github.com/plifk/market)
+
 Market is an opensource market project you can use to create an online presence for your store.
 
 ## Roadmap
