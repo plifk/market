@@ -91,7 +91,7 @@ func (i *Images) HTML(path string, alt string, p ThumbnailParams) (template.HTML
 		img += ` alt="` + html.EscapeString(alt) + `"`
 	}
 	img += `>`
-	return template.HTML(img), nil
+	return template.HTML(img), nil // #nosec
 }
 
 func imageURLsignature(signKey string, u *url.URL) string {

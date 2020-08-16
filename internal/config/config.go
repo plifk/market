@@ -69,7 +69,7 @@ type Settings struct {
 
 // ReadFile loads the settings from a configuration file.
 func ReadFile(path string) (s Settings, err error) {
-	f, err := os.Open(path)
+	f, err := os.Open(path) // #nosec
 	if err != nil {
 		return s, err
 	}

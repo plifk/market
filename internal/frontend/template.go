@@ -91,12 +91,13 @@ func (f *Frontend) Respond(w http.ResponseWriter, r *http.Request, resp *HTMLRes
 
 func wrapLayout(w http.ResponseWriter, t *template.Template, buf *bytes.Buffer, data *HTMLResponse) {
 	// Copy the bytes of the response from the buffer to the Body field.
+	htmlBody := template.HTML(buf.Bytes()) // #nosec
 	layout := struct {
 		*HTMLResponse
 		Body template.HTML
 	}{
 		HTMLResponse: data,
-		Body:         template.HTML(buf.Bytes()),
+		Body:         htmlBody,
 	}
 	// Clean up the buffer after copying.
 	buf.Reset()
@@ -125,7 +126,7 @@ func csrfField(r *http.Request) template.HTML {
 	if r != nil {
 		token = services.CSRFToken(r)
 	}
-	return template.HTML(`<input type="hidden" name="csrf_token" value="` + html.EscapeString(token) + `">`)
+	return template.HTML(`<input type="hidden" name="csrf_token" value="` + html.EscapeString(token) + `">`) // #nosec
 }
 
 // Breadcrumb shows where the user is currently.

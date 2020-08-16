@@ -5,7 +5,7 @@ import (
 	_ "expvar"
 	"log"
 	"math/rand"
-	_ "net/http/pprof"
+	_ "net/http/pprof" // #nosec
 	"os"
 	"time"
 
