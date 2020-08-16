@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xeuo pipefail
+set -euo pipefail
 IFS=$'\n\t'
 
 # Static analysis scripts
