@@ -21,7 +21,7 @@ echo "Running staticcheck toolset."
 staticcheck ./...
 
 echo "Running tosec to check possible security issues."
-gosec -quiet ./...
+gosec -quiet -exclude G104 ./... # Ignoring gosec unhandled errors warning due to many false positives.
 
 echo "Running mispell."
 misspell cmd/**/*.{go,sh} internal/**/*.{go} README.md
