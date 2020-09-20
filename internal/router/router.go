@@ -7,28 +7,90 @@ import (
 	"strings"
 )
 
-// Route format.
-// Example: /products/:product_id/details
-type Route string
+// Mux is a set of routes.
+//
+// NOTE(henvic): This could be a tree router too, but this should be good and simple enough.
+type Mux struct {
+	DefaultHandler http.Handler
+	Routes         []Route
+}
 
-// Match path with route.
-func (r Route) Match(path string) (Params, bool) {
-	rp := strings.FieldsFunc(string(r), isPathSeparator)
-	pp := strings.FieldsFunc(path, isPathSeparator)
-	if len(rp) != len(pp) {
-		return nil, false
+// Validate router mux entries.
+func (m *Mux) Validate() {
+	for _, route := range m.Routes {
+		for _, method := range route.Methods {
+			switch method {
+			case http.MethodConnect, http.MethodDelete, http.MethodGet,
+				http.MethodHead, http.MethodOptions, http.MethodPatch,
+				http.MethodPost, http.MethodPut, http.MethodTrace:
+			default:
+				panic("unsupported HTTP method: " + method)
+			}
+		}
 	}
+}
+
+// ServeHTTP handles request using the mux router.
+// URL paths are normalized by stripping trailing slash.
+// If a match is not found, it uses the m.DefaultHandler or http.NotFound if a default handler is not set.
+func (m *Mux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if normalizeRedirect(w, r) {
+		return
+	}
+	for _, route := range m.Routes {
+		if params, ok := route.Match(r.Method, r.URL.Path); ok {
+			if len(params) != 0 {
+				r = r.Clone(WithParams(r.Context(), params))
+			}
+			route.Handler.ServeHTTP(w, r)
+			return
+		}
+	}
+	if m.DefaultHandler != nil {
+		m.DefaultHandler.ServeHTTP(w, r)
+		return
+	}
+	http.NotFound(w, r)
+}
+
+// Route for the HTTP server. Pattern uses a :field format.
+// Pattern example: /products/:product_id/details
+// Method cannot be empty.
+type Route struct {
+	Pattern string
+	Methods []string
+	Handler http.Handler
+
+	_ struct{}
+}
+
+// Match route.
+func (r *Route) Match(method, path string) (Params, bool) {
+	for _, m := range r.Methods {
+		if method == m {
+			return r.MatchPath(path)
+		}
+	}
+	return Params{}, false
+}
+
+// MatchPath with route.
+func (r *Route) MatchPath(path string) (Params, bool) {
+	rp := strings.FieldsFunc(string(r.Pattern), isPathSeparator)
+	pp := strings.FieldsFunc(path, isPathSeparator)
 	params := Params{}
+	if len(rp) != len(pp) {
+		return params, false
+	}
 	for pos, p := range rp {
 		if len(p) > 0 && p[0] == ':' {
 			if _, ok := params[p[1:]]; ok {
-				// NOTE(henvic): This panic is here to help debugging the application.
-				// It has a minor limitation: it is only triggered when the format matches.
+				// NOTE(henvic): This panic helps when debugging.
 				panic("route contains duplicated field")
 			}
 			params[p[1:]] = pp[pos]
 		} else if p != pp[pos] {
-			return nil, false
+			return params, false
 		}
 	}
 	return params, true
@@ -61,22 +123,27 @@ func (p Params) Get(field string) string {
 	return p[field]
 }
 
-// NormalizeRedirect redicts if path needs to be normalized. It returns true if redirection is made.
-func NormalizeRedirect(w http.ResponseWriter, r *http.Request) (cancel bool) {
+// normalizeRedirect redicts if path needs to be normalized. It returns true if redirection is made.
+func normalizeRedirect(w http.ResponseWriter, r *http.Request) (redirected bool) {
 	path := cleanPath(r.URL.Path)
-	if r.URL.Path != path {
-		rc := *r.URL
-		rc.User = r.URL.User
-		rc.Path = path
-		// Use 'moved permanently' for HEAD|GET requests.
-		code := http.StatusMovedPermanently
-		if r.Method != http.MethodHead && r.Method != http.MethodGet {
-			code = http.StatusTemporaryRedirect
-		}
-		http.Redirect(w, r, rc.String(), code)
-		return true
+
+	// Remove trailing slash, unless if path = /.
+	if path != "/" && path[len(path)-1] == '/' {
+		path = path[:len(path)-1]
 	}
-	return false
+	if path == r.URL.Path {
+		return false
+	}
+	rc := *r.URL
+	rc.User = r.URL.User
+	rc.Path = path
+	// Use 'moved permanently' for HEAD|GET requests.
+	code := http.StatusPermanentRedirect
+	if r.Method != http.MethodHead && r.Method != http.MethodGet {
+		code = http.StatusTemporaryRedirect
+	}
+	http.Redirect(w, r, rc.String(), code)
+	return true
 }
 
 // cleanPath returns the canonical path for p, eliminating . and .. elements.
