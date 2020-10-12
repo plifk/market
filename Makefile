@@ -5,6 +5,6 @@ main: # don't change this line; first line is the default target in make <= 3.79
 	echo "market commands:"
 	echo "run, test"
 run:
-	go run cmd/market/*.go serve -config cmd/market/local.json
+	go run -trimpath cmd/market/*.go serve -config cmd/market/local.json
 test:
 	./scripts/test.sh
