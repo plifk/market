@@ -4,7 +4,7 @@ name: Code Scanning
 on:
   push:
   schedule:
-    - cron: "0 0 * * 0"
+    - cron: "17 0 * * 0"
 
 jobs:
   CodeQL-Build:
